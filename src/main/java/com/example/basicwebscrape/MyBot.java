@@ -53,8 +53,8 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String command = update.getMessage().getText();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
-            /*message.setChatId(update.getMessage().getChatId().toString());
-            message.setText(update.getMessage().getText());*/
+            message.setChatId(update.getMessage().getChatId().toString());
+            message.setText(update.getMessage().getText());
             if(command.equals("/myname")){
                 String msg = getBotUsername();
                 message.setChatId(update.getMessage().getChatId().toString());
@@ -77,12 +77,12 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         // TODO
-        return "saka12_bot";
+        return "Vin22bot";
     }
 
     @Override
     public String getBotToken() {
         // TODO
-        return "5117983190:AAEXlcpIKO2tcMO7JKSu8CLkh350RRDuR3w";
+        return "5124630324:AAGd47oSNGFSX2xhEdOmY8-G8BMD0v9rYDc";
     }
 }
