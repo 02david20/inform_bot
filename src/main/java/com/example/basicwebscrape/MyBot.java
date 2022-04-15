@@ -77,7 +77,7 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         // TODO
-        return "Vin22bot";
+        return "InfoBot";
     }
 
     @Override
