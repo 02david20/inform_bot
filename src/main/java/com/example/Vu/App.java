@@ -1,9 +1,5 @@
-package com.example.basicwebscrape;
+package com.example.Vu;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -13,7 +9,7 @@ public class App {
 
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new MyBot());
+            botsApi.registerBot(new Bot());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
