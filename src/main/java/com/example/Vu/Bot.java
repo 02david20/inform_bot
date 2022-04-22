@@ -17,7 +17,7 @@ public class Bot extends TelegramLongPollingBot {
             doc = Jsoup.connect(url).get();
             Element table = doc.select("table").get(0);
             Elements allRows = table.select("tr");
-            String str = "GIÁ XĂNG DẦU HIỆN TẠI:\n";
+            String str = "GIÁ XĂNG DẦU HIỆN TẠI:\n\n";
             for (int i = 2; i < allRows.size(); ++i) {
                 Element row = allRows.get(i);
                 Elements cols = row.select("td");
