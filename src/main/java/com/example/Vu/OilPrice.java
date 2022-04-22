@@ -14,7 +14,13 @@ public class OilPrice {
     public String returnOilPrice(Document doc, String url) {
         Element table = doc.select("table").get(0);
         Elements allRows = table.select("tr");
-        this.oilprice = "GIÁ XĂNG DẦU HIỆN TẠI:\n\n";
+        this.oilprice = allRows
+                        .get(0)
+                        .select("td")
+                        .get(2)
+                        .select("span")
+                        .get(0)
+                        .text() + "\n\n";
         for (int i = 2; i < allRows.size(); ++i) {
             Element row = allRows.get(i);
             Elements cols = row.select("td");
