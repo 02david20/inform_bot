@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import org.json.JSONObject;
 
 public class WeatherHourly {
+    private int info;
     private String date;
     private double temp;
     private int prec;
@@ -19,6 +20,7 @@ public class WeatherHourly {
         format.setTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Jakarta")));
         int tem = o.getJSONObject("Temperature").getInt("Value");
         
+        this.info = o.getInt("WeatherIcon");
         this.date = format.format(datee);
         this.temp = Math.round((tem-32.0)*5/9*100.0)/100.0;
         this.prec = o.getInt("PrecipitationProbability");
@@ -48,10 +50,21 @@ public class WeatherHourly {
     public void setPrec(int prec){
         this.prec = prec;
     }
+    public int getInfo(){
+        return this.info;
+    }
+    public void setInfo(int info){
+        this.info = info;
+    }
+    public String getIcon(){
+        String pre = "images/";
+        return pre + this.info +"-s.png";
+    }
+
     public String toString(){
         //concat the result
         String result = 
-            "--" + this.date + "--\n"
+            "<b>" + this.date + "</b>\n"
             + "Nhiệt độ: " + this.temp
             + " độ C\nDự báo: " + this.desc
             + "\nKhả năng có mưa: " + this.prec + "%\n\n";
