@@ -158,8 +158,8 @@ public class MyBot extends TelegramLongPollingBot {
                 }
                 for (HashMap.Entry<String,ArrayList<String>> msg:msgs.entrySet()) {
                     String strr = msg.getKey();
-                    int first_under = strr.indexOf("Ngày");
-                    int second_under = strr.indexOf("Đêm",first_under+1);
+                    int first_under = strr.indexOf("NgÃ y");
+                    int second_under = strr.indexOf("Ä�Ãªm",first_under+1);
                     String messageOverall = strr.substring(0,first_under);
                     String messageDay = strr.substring(first_under,second_under);
                     String messageNight = strr.substring(second_under);
@@ -180,6 +180,11 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 }
                 printedMany = true; 
+                try {
+                    execute(message); // Call method to send the message
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
 
             if(command.contains("/gold")){
@@ -213,11 +218,7 @@ public class MyBot extends TelegramLongPollingBot {
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setText(msg);
             }
-            try {
-                execute(message); // Call method to send the message
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-
+            
             else if(command.contains("/weatherhourly") || command.equals("Get a 12-hour forecast")){
                 SendPhoto photo = new SendPhoto();
                 TreeMap<String,String> msgs = new TreeMap<String,String>();
@@ -233,7 +234,7 @@ public class MyBot extends TelegramLongPollingBot {
                 for (HashMap.Entry<String, String> msg:msgs.entrySet()) {
                     String strr = msg.getKey();
                     photo.setPhoto(new InputFile(new File(msg.getValue()),"Hour"));
-                    int breaker = strr.indexOf("Nhiệt độ");
+                    int breaker = strr.indexOf("Nhiá»‡t Ä‘á»™");
                     message.setText(strr.substring(0,breaker));
                     photo.setCaption(strr.substring(breaker));
                     try {
@@ -283,7 +284,7 @@ public class MyBot extends TelegramLongPollingBot {
             }
             else{
                 message.setChatId(chat_id);
-                message.setText("Xin lỗi, câu lệnh của bạn không tồn tại");
+                message.setText("Xin lá»—i, cÃ¢u lá»‡nh cá»§a báº¡n khÃ´ng tá»“n táº¡i");
             }
             if (!printedMany){
                 try {
