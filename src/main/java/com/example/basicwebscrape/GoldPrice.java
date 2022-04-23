@@ -71,7 +71,7 @@ public class GoldPrice {
     	
     	this.crawled = false;
     }
-    public void crawl_data(String ID) {
+    public static void crawl_data(String ID) {
     	String urlString = urlMap.get(ID);
     	try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -90,7 +90,7 @@ public class GoldPrice {
             System.out.println("There is errors occur");
         }
     }
-    public void parse(String ID,JSONArray responseBody) {
+    private static void parse(String ID,JSONArray responseBody) {
     	ArrayList<OneDay> Data = new ArrayList<OneDay>() ;
     	JSONArray albums = responseBody;
     	for (int i = 0 ; i < albums.length(); i++) {
@@ -105,6 +105,25 @@ public class GoldPrice {
     	}
     	dataMap.put(ID, Data);
     } 
+    
+    
+    public static String getPrice(String ID) {
+    	
+    	List<OneDay> data = dataMap.get(ID);
+    	if(data.size() != 0) {
+    		OneDay today = data.get(data.size()-1);
+	    	Date date= new Date();
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			df.setTimeZone(TimeZone.getTimeZone("Asia/VietNam"));
+			// If the date crawled is today then just return
+			if(today.updateTime == df.format(date)) {
+				return to_string(ID);
+			}
+    	}
+    	crawl_data(ID);
+    	return to_string(ID);
+    }
+    
     public static String to_string(String ID) {
     	List<String> l = new ArrayList<String>();
     	ArrayList<OneDay>data = dataMap.get(ID);

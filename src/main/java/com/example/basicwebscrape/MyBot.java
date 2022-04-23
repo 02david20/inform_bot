@@ -1,8 +1,4 @@
 package com.example.basicwebscrape;
-
-
-import static com.example.basicwebscrape.GoldPrice.urlMap;
-
 import java.io.PrintStream;
 
 
@@ -46,6 +42,7 @@ public class MyBot extends TelegramLongPollingBot {
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     //private final String apikey = "gHuEn9ghiy20CHSHAJ4ccgWcdU0XWkGS";
     private final String apikey = "dhJQfH709c5McTPTTa2ZfF9WCfCuwNPl";
+    private static GoldPrice crawler = new GoldPrice();
     private static HashMap<String,Integer> cities;
     static {
         cities = new HashMap<String, Integer>();
@@ -137,6 +134,7 @@ public class MyBot extends TelegramLongPollingBot {
             String command = update.getMessage().getText();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.enableHtml(true);
+  
             if(command.equals("/myname")){
                 String msg = getBotUsername();
                 message.setChatId(chat_id);
@@ -188,33 +186,41 @@ public class MyBot extends TelegramLongPollingBot {
             }
 
             if(command.contains("/gold")){
-            	GoldPrice crawler = new GoldPrice();
+            	
                 String[] str = command.split(" ");
                 String msg = "";
-                
+
                 if(str.length == 1) {
-                	msg = ":information_source: Format for /gold:\n"
+                	msg = ":information_source: Định dạng /gold:\n"
                 			+ "/gold all\n"
                 			+ "/gold key\n"
-                			+ "For key:\n";
+                			+ "\nkey:\n";
                 	for (String k : GoldPrice.urlMap.keySet()) {
                 		msg += k+"\n";
                 	}
                 	msg = EmojiParser.parseToUnicode(msg);
                 }
-                else if(str[1] == "all") {
-//                	List<String> IDs = new ArrayList<>(GoldPrice.urlMap.keySet());
-//                	IDs.forEach(ID -> {
-//                		
-//                	});
+                else {
+                	msg += "Đơn vị (đồng/lượng)\n\n";
+                	   if(str[1].equals("all")) {
+	                       	List<String> IDs = new ArrayList<>(GoldPrice.urlMap.keySet());
+		                       	for (String ID :IDs) {
+		                       		msg += "* "+ID+" :\n"+GoldPrice.getPrice(ID) + "\n----------\n";
+		                       	}
+	                       	msg = EmojiParser.parseToUnicode(msg);
 
-                }else {
-//                	List<String> IDs = new ArrayList<>(GoldPrice.urlMap.keySet());
-                	crawler.crawl_data(str[1]);
-                	msg = GoldPrice.to_string(str[1]);
-                	msg = EmojiParser.parseToUnicode(msg);
+                       }else {
+                  
+	                       	if(!GoldPrice.dataMap.containsKey(str[1])) {
+	                       		 msg = "ID không tồn tại";
+	                       	}else {
+		       	                	msg = GoldPrice.getPrice(str[1]);
+		       	                	msg = EmojiParser.parseToUnicode(msg);
+	                       	}
+                       }
+                		
                 }
-      
+             
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setText(msg);
             }
@@ -284,7 +290,7 @@ public class MyBot extends TelegramLongPollingBot {
             }
             else{
                 message.setChatId(chat_id);
-                message.setText("Xin lá»—i, cÃ¢u lá»‡nh cá»§a báº¡n khÃ´ng tá»“n táº¡i");
+                message.setText("Xin lỗi, câu lệnh của bạn không tồn tại");
             }
             if (!printedMany){
                 try {
