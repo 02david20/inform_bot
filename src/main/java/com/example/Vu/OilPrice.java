@@ -13,7 +13,7 @@ public class OilPrice {
         oilprice = allRows
                         .select("span")
                         .get(0)
-                        .text() + "\n---------------------------------------------------------------\n";
+                        .text() + "\n-----------------------------------\n";
         for (int i = 2; i < allRows.size(); ++i) {
             Element row = allRows.get(i);
             Elements cols = row.select("td");
@@ -30,6 +30,6 @@ public class OilPrice {
         oilprice += idx + ". " + "Tên mặt hàng: " + name + '\n' + "    " +
                      "Giá (VND/lít): " + price + '\n'+ "    " +
                      "Chênh lệch (tăng/giảm): " + deviation +
-                     '\n' + "---------------------------------------------------------------" + '\n';
+                     '\n' + "-----------------------------------" + '\n';
     }
 }
