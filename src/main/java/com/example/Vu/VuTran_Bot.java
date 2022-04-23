@@ -9,18 +9,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class VuTran_Bot extends TelegramLongPollingBot {
     public String getOilPrice() {
-        Document doc = null;
-        String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
         try {
-            doc = Jsoup.connect(url).get();
-            OilPrice oilprice = new OilPrice();
-            String str = oilprice.returnOilPrice(doc, url);
-            return str;
+            String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
+            Document doc = Jsoup.connect(url).get();
+            return OilPrice.returnOilPrice(doc, url);
         } catch (Exception e) {
             e.printStackTrace();
             return "Có lỗi xảy ra";
         }
     }
+
     @Override
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
