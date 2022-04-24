@@ -29,6 +29,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.vdurmont.emoji.EmojiParser;
 
+import gold.GoldPrice;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,7 +136,6 @@ public class MyBot extends TelegramLongPollingBot {
             String command = update.getMessage().getText();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.enableHtml(true);
-  
             if(command.equals("/myname")){
                 String msg = getBotUsername();
                 message.setChatId(chat_id);
@@ -194,6 +195,7 @@ public class MyBot extends TelegramLongPollingBot {
                 	msg = ":information_source: Định dạng /gold:\n"
                 			+ "/gold all\n"
                 			+ "/gold key\n"
+                			+ "/gold key history\n"
                 			+ "\nkey:\n";
                 	for (String k : GoldPrice.urlMap.keySet()) {
                 		msg += k+"\n";
@@ -214,15 +216,31 @@ public class MyBot extends TelegramLongPollingBot {
 	                       	if(!GoldPrice.dataMap.containsKey(str[1])) {
 	                       		 msg = "ID không tồn tại";
 	                       	}else {
-		       	                	msg = GoldPrice.getPrice(str[1]);
-		       	                	msg = EmojiParser.parseToUnicode(msg);
+	                       			if(str.length == 2) {
+	                       				msg += GoldPrice.getPrice(str[1]);
+	                       				msg = EmojiParser.parseToUnicode(msg);
+	                       			}else if(str.length == 3) {
+	                       				if(str[2].equals("history")) {
+	                       					msg += GoldPrice.get_history(str[1]);
+	                       					msg = EmojiParser.parseToUnicode(msg);
+	                       				}else {
+	                       				
+	                       					msg = "Câu lệnh không hợp lệ";
+	                       				}
+	                       			}else {
+	                       				
+	                       				msg = "Câu lệnh không hợp lệ";
+	                       			}
+		       	                	
 	                       	}
                        }
                 		
                 }
              
                 message.setChatId(update.getMessage().getChatId().toString());
+                message.enableMarkdown(true);
                 message.setText(msg);
+                
             }
             
             else if(command.contains("/weatherhourly") || command.equals("Get a 12-hour forecast")){

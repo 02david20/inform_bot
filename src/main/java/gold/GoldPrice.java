@@ -1,4 +1,4 @@
-package com.example.basicwebscrape;
+package gold;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -45,6 +45,7 @@ public class GoldPrice {
             .build();
     public static Map <String, String> urlMap;
     public static Map <String, ArrayList<OneDay> > dataMap;
+    private static ArrayList<String> tracking;
     public GoldPrice() {
     	
     	urlMap = new HashMap <String,String>();
@@ -69,6 +70,7 @@ public class GoldPrice {
     	dataMap.put("PNJ_HCM", new ArrayList<OneDay>());
     	dataMap.put("PNJ_HN", new ArrayList<OneDay>());
     	
+    	tracking = new ArrayList<String>();
     	this.crawled = false;
     }
     public static void crawl_data(String ID) {
@@ -112,11 +114,9 @@ public class GoldPrice {
     	List<OneDay> data = dataMap.get(ID);
     	if(data.size() != 0) {
     		OneDay today = data.get(data.size()-1);
-	    	Date date= new Date();
-			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-			df.setTimeZone(TimeZone.getTimeZone("Asia/VietNam"));
 			// If the date crawled is today then just return
-			if(today.updateTime == df.format(date)) {
+    
+			if(today.updateTime.equals(Today())) {
 				return to_string(ID);
 			}
     	}
@@ -124,15 +124,14 @@ public class GoldPrice {
     	return to_string(ID);
     }
     
-    public static String to_string(String ID) {
-    	List<String> l = new ArrayList<String>();
+    private static String to_string(String ID) {
     	ArrayList<OneDay>data = dataMap.get(ID);
     	OneDay temp = data.get(data.size()-1);
     	OneDay yesterday = data.get(data.size()-2);
     	int sell_change = temp.sell-yesterday.sell;
     	int buy_change = temp.buy-yesterday.buy;
 
-    	String str = "Date: "+ temp.date
+    	String str = "Date : "+ temp.date
     				+"\n\tBuy: "+temp.buy+" "+change(buy_change)
     				+"\n\tSell: "+temp.sell+" "+change(sell_change);
     	return str;
@@ -152,5 +151,53 @@ public class GoldPrice {
     	
     }
     
+    public static String get_history(String ID) {
+    	ArrayList<OneDay>data = dataMap.get(ID);
+    	if(data.size() == 0 && !data.get(data.size()-1).updateTime.equals(Today())) {
+    		crawl_data(ID);
+    		data = dataMap.get(ID);
+    	}
+    	String str = new String();
+    	OneDay temp = data.get(0);
+    	str += "Date: "+ temp.date
+				+"\n\tBuy: "+temp.buy+" "
+				+"\n\tSell: "+temp.sell+" "+"\n";
+    	
+    	for (int i = 1; i < data.size() ; i++) {
+    		OneDay today = data.get(i);
+    	 	OneDay yesterday = data.get(i-1);
+        	int sell_change = today.sell-yesterday.sell;
+        	int buy_change = today.buy-yesterday.buy;
+        	str += "Date : "+ today.date
+				+"\n\tBuy: "+today.buy+" "+change(buy_change)
+				+"\n\tSell: "+today.sell+" "+change(sell_change)+"\n";
+
+    	}
+    	return str;
+    }
+    // Tracking Gold every day
+    public Boolean Track_ID(String ID) {
+    	if(! dataMap.containsKey(ID)) {
+    		return false;
+    	}
+    	if(tracking.contains(ID))
+    		return true;
+    	tracking.add(ID);
+    	return true;
+    }
     
+    public String getTrackInfo() {
+    	String msg = new String();
+    	for (String ID : tracking) {
+    		msg += getPrice(ID) + "\n----------\n";
+    	}
+    	return msg;
+    }
+    
+    private static String Today() {
+    	Date date= new Date();
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("Asia/VietNam"));
+		return df.format(date);
+    }
 }
