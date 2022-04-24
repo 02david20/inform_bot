@@ -1,12 +1,21 @@
 package com.example.basicwebscrape;
+import java.io.PrintStream;
+
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.io.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -17,6 +26,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+
+import com.vdurmont.emoji.EmojiParser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +36,14 @@ import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import com.example.basicwebscrape.gold.GoldPrice;
 import com.example.basicwebscrape.weather.*;
+
 public class MyBot extends TelegramLongPollingBot {
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     //private final String apikey = "gHuEn9ghiy20CHSHAJ4ccgWcdU0XWkGS";
     private final String apikey = "dhJQfH709c5McTPTTa2ZfF9WCfCuwNPl";
+    private static GoldPrice crawler = new GoldPrice();
     private static HashMap<String,Integer> cities;
     static {
         cities = new HashMap<String, Integer>();
@@ -141,8 +156,8 @@ public class MyBot extends TelegramLongPollingBot {
                 }
                 for (HashMap.Entry<String,ArrayList<String>> msg:msgs.entrySet()) {
                     String strr = msg.getKey();
-                    int first_under = strr.indexOf("Ngày");
-                    int second_under = strr.indexOf("Đêm",first_under+1);
+                    int first_under = strr.indexOf("NgÃ y");
+                    int second_under = strr.indexOf("Ä�Ãªm",first_under+1);
                     String messageOverall = strr.substring(0,first_under);
                     String messageDay = strr.substring(first_under,second_under);
                     String messageNight = strr.substring(second_under);
@@ -163,7 +178,70 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 }
                 printedMany = true; 
+                try {
+                    execute(message); // Call method to send the message
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
+
+            if(command.contains("/gold")){
+            	
+                String[] str = command.split(" ");
+                String msg = "";
+
+                if(str.length == 1) {
+                	msg = ":information_source: Định dạng /gold:\n"
+                			+ "/gold all\n"
+                			+ "/gold key\n"
+                			+ "/gold key history\n"
+                			+ "\nkey:\n";
+                	for (String k : GoldPrice.urlMap.keySet()) {
+                		msg += k+"\n";
+                	}
+                	msg = EmojiParser.parseToUnicode(msg);
+                }
+                else {
+                	msg += "Đơn vị (đồng/lượng)\n\n";
+                	   if(str[1].equals("all")) {
+	                       	List<String> IDs = new ArrayList<>(GoldPrice.urlMap.keySet());
+		                       	for (String ID :IDs) {
+		                       		msg += "* "+ID+" :\n"+GoldPrice.getPrice(ID) + "\n----------\n";
+		                       	}
+	                       	msg = EmojiParser.parseToUnicode(msg);
+
+                       }else {
+                  
+	                       	if(!GoldPrice.dataMap.containsKey(str[1])) {
+	                       		 msg = "ID không tồn tại";
+	                       	}else {
+	                       			if(str.length == 2) {
+	                       				msg += GoldPrice.getPrice(str[1]);
+	                       				msg = EmojiParser.parseToUnicode(msg);
+	                       			}else if(str.length == 3) {
+	                       				if(str[2].equals("history")) {
+	                       					msg += GoldPrice.get_history(str[1]);
+	                       					msg = EmojiParser.parseToUnicode(msg);
+	                       				}else {
+	                       				
+	                       					msg = "Câu lệnh không hợp lệ";
+	                       				}
+	                       			}else {
+	                       				
+	                       				msg = "Câu lệnh không hợp lệ";
+	                       			}
+		       	                	
+	                       	}
+                       }
+                		
+                }
+             
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.enableMarkdown(true);
+                message.setText(msg);
+                
+            }
+            
             else if(command.contains("/weatherhourly") || command.equals("Get a 12-hour forecast")){
                 SendPhoto photo = new SendPhoto();
                 TreeMap<String,String> msgs = new TreeMap<String,String>();
@@ -179,7 +257,7 @@ public class MyBot extends TelegramLongPollingBot {
                 for (HashMap.Entry<String, String> msg:msgs.entrySet()) {
                     String strr = msg.getKey();
                     photo.setPhoto(new InputFile(new File(msg.getValue()),"Hour"));
-                    int breaker = strr.indexOf("Nhiệt độ");
+                    int breaker = strr.indexOf("Nhiá»‡t Ä‘á»™");
                     message.setText(strr.substring(0,breaker));
                     photo.setCaption(strr.substring(breaker));
                     try {
@@ -237,10 +315,15 @@ public class MyBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
             }
         }
     }
-
+    
+    public String getGoldPrice() {
+    
+        return null;
+    }
     @Override
     public String getBotUsername() {
         // TODO
