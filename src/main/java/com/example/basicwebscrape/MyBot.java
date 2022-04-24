@@ -29,8 +29,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.vdurmont.emoji.EmojiParser;
 
-import gold.GoldPrice;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +36,7 @@ import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import com.example.basicwebscrape.gold.GoldPrice;
 import com.example.basicwebscrape.weather.*;
 
 public class MyBot extends TelegramLongPollingBot {

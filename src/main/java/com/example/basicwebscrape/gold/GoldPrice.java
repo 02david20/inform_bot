@@ -1,4 +1,4 @@
-package gold;
+package com.example.basicwebscrape.gold;
 
 import java.net.URI;
 import java.net.http.HttpClient;
