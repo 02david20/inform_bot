@@ -2,6 +2,8 @@ package com.example.basicwebscrape;
 import java.io.PrintStream;
 
 
+import java.io.*;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.io.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -33,13 +36,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 import com.example.basicwebscrape.gold.GoldPrice;
 import com.example.basicwebscrape.weather.*;
 
 public class MyBot extends TelegramLongPollingBot {
+
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     //private final String apikey = "gHuEn9ghiy20CHSHAJ4ccgWcdU0XWkGS";
     private final String apikey = "dhJQfH709c5McTPTTa2ZfF9WCfCuwNPl";
@@ -125,6 +127,7 @@ public class MyBot extends TelegramLongPollingBot {
             return null;
         }
     }
+
     @Override
     public void onUpdateReceived(Update update) {
         // TODO
@@ -140,6 +143,22 @@ public class MyBot extends TelegramLongPollingBot {
                 message.setChatId(chat_id);
                 message.setText(msg);   
             }
+            else if (command.equals("/weather")) {
+                message.setChatId(chat_id);
+                message.setText("Here is your keyboard");
+
+                ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+                List<KeyboardRow> keyboard = new ArrayList<>();
+                KeyboardRow row = new KeyboardRow();
+                row.add("Get a 5-day forecast");
+                keyboard.add(row);
+                row = new KeyboardRow();
+                row.add("Get a 12-hour forecast");
+                keyboard.add(row);
+
+                keyboardMarkup.setKeyboard(keyboard);
+                message.setReplyMarkup(keyboardMarkup);
+            }
             else if(command.contains("/weatherdaily") || command.equals("Get a 5-day forecast")){
                 SendPhoto photoDay = new SendPhoto();
                 SendPhoto photoNight = new SendPhoto();
@@ -147,12 +166,12 @@ public class MyBot extends TelegramLongPollingBot {
                 photoNight.setChatId(chat_id);
                 message.setChatId(chat_id);
                 TreeMap<String,ArrayList<String>> msgs = new TreeMap<String,ArrayList<String>>();
-                if(command.equals("/weatherdaily") || command.equals("/weatherdaily ")){
-                    msgs = getForecastDaily("hochiminh");
+                if(command.equals("/weatherdaily") || command.equals("/weatherdaily ") || command.equals("Get a 5-day forecast")){
+                    msgs = Weather.getForecastDaily("hochiminh");
                 }
                 else{
                     String[] str = command.split(" ");
-                    msgs = getForecastDaily(str[1]);
+                    msgs = Weather.getForecastDaily(str[1]);
                 }
                 for (HashMap.Entry<String,ArrayList<String>> msg:msgs.entrySet()) {
                     String strr = msg.getKey();
@@ -247,12 +266,12 @@ public class MyBot extends TelegramLongPollingBot {
                 TreeMap<String,String> msgs = new TreeMap<String,String>();
                 photo.setChatId(chat_id);
                 message.setChatId(chat_id);
-                if(command.equals("/weatherhourly") || command.equals("/weatherhourly ")){
-                    msgs = getForecastHourly("hochiminh");
+                if(command.equals("/weatherhourly") || command.equals("/weatherhourly ") || command.equals("Get a 12-hour forecast")){
+                    msgs = Weather.getForecastHourly("hochiminh");
                 }
                 else{
                     String[] str = command.split(" ");
-                    msgs = getForecastHourly(str[1]);
+                    msgs = Weather.getForecastHourly(str[1]);
                 }
                 for (HashMap.Entry<String, String> msg:msgs.entrySet()) {
                     String strr = msg.getKey();
@@ -269,41 +288,11 @@ public class MyBot extends TelegramLongPollingBot {
                 }
                 printedMany = true;        
             }
-
-            else if (command.equals("/markup")) {
-                message.setChatId(chat_id);
-                message.setText("Here is your keyboard");
-                // Create ReplyKeyboardMarkup object
-                ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-                // Create the keyboard (list of keyboard rows)
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                // Create a keyboard row
-                KeyboardRow row = new KeyboardRow();
-                // Set each button, you can also use KeyboardButton objects if you need something else than text
-                row.add("Get a 5-day forecast");
-                row.add("Get a 12-hour forecast");
-                // Add the first row to the keyboard
-                keyboard.add(row);
-                // Set the keyboard to the markup
-                keyboardMarkup.setKeyboard(keyboard);
-                // Add it to the message
-                message.setReplyMarkup(keyboardMarkup);
-                try {
-                    execute(message); // Sending our message object to user
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
             else if (command.equals("/hide")) {
                 message.setText("Keyboard hidden");
                 message.setChatId(chat_id);
-                ReplyKeyboardRemove keyboardMarkup = new ReplyKeyboardRemove();
+                ReplyKeyboardRemove keyboardMarkup = new ReplyKeyboardRemove(true);
                 message.setReplyMarkup(keyboardMarkup);
-                try {
-                    execute(message); // Call method to send the photo
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
             }
             else{
                 message.setChatId(chat_id);
