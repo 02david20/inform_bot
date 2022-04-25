@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class VuTran_Bot extends TelegramLongPollingBot {
+public class VuTran extends TelegramLongPollingBot {
     public String getOilPrice() {
         try {
             String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";

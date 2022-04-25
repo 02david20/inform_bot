@@ -28,8 +28,8 @@ public class OilPrice {
         String price = cols.get(2).text();
         String deviation = cols.get(3).text();
         oilprice += idx + ". " + "Tên mặt hàng: " + name + '\n' + "    " +
-                     "Giá (VND/lít): " + price + '\n'+ "    " +
-                     "Chênh lệch (tăng/giảm): " + deviation +
-                     '\n' + "-----------------------------------" + '\n';
+                    "Giá (VND/lít): " + price + '\n'+ "    " +
+                    "Chênh lệch (tăng/giảm): " + deviation +
+                    '\n' + "-----------------------------------" + '\n';
     }
 }
