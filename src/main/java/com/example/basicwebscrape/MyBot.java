@@ -5,8 +5,11 @@ import java.io.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -24,48 +27,103 @@ public class MyBot extends TelegramLongPollingBot {
         // TODO
         // We check if the update has a message and the message has text
         Boolean printedMany = false;
-        String chat_id = update.getMessage().getChatId().toString();
+        //String chat_id = update.getMessage().getChatId().toString();
         if (update.hasMessage() && update.getMessage().hasText()) {
             String command = update.getMessage().getText();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.enableHtml(true);
+
             if(command.equals("/myname")){
                 String msg = getBotUsername();
-                message.setChatId(chat_id);
+                message.setChatId(update.getMessage().getChatId().toString());
                 message.setText(msg);   
             }
-            else if (command.equals("/weather")) {
-                message.setChatId(chat_id);
-                message.setText("Here is your keyboard");
+            else if (command.equals("/start")){
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setText("Menu");
 
                 ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
                 List<KeyboardRow> keyboard = new ArrayList<>();
+
                 KeyboardRow row = new KeyboardRow();
-                row.add("Get a 5-day forecast");
+                row.add("News and Topic");
                 keyboard.add(row);
+                
                 row = new KeyboardRow();
-                row.add("Get a 12-hour forecast");
+                row.add("Weather Forecast");
+                row.add("Football Events");
+                keyboard.add(row);
+                
+                row = new KeyboardRow();
+                row.add("Oil Price");
+                row.add("Gold Price");
                 keyboard.add(row);
 
                 keyboardMarkup.setKeyboard(keyboard);
                 message.setReplyMarkup(keyboardMarkup);
             }
-            else if(command.contains("/weatherdaily") || command.equals("Get a 5-day forecast")){
+            else if (command.equals("/weather") || command.equals("Weather Forecast")) {
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setText("Select Forecast Duration");
+
+                message.setReplyMarkup(Weather.setButtons());
+            }
+            //YOUR COMMAND HERE
+            // NEWS
+            // GOLD
+            // OIL
+            // FOOTBALL
+            //END QUERIES
+            else if (command.equals("/hide")) {
+                message.setText("Keyboard hidden");
+                message.setChatId(update.getMessage().getChatId().toString());
+                ReplyKeyboardRemove keyboardMarkup = new ReplyKeyboardRemove(true);
+                message.setReplyMarkup(keyboardMarkup);
+            }
+            else{
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setText("Xin lỗi, câu lệnh của bạn không tồn tại");
+            }
+            if (!printedMany){
+                try {
+                    execute(message); // Call method to send the message
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if (update.hasCallbackQuery()) {
+            SendMessage message = new SendMessage();
+            message.enableHtml(true);
+            Message msg = update.getCallbackQuery().getMessage();
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            String data = callbackQuery.getData();
+            message.setChatId(msg.getChatId().toString());
+            /* Standing standing = new Standing();
+            Matches matches = new Matches();
+            Scorers scorers = new Scorers(); */
+            String topic = data.split("_")[0];
+            String type = data.split("_")[1];
+            /* if (type.equals("standing")) {
+                message.setText(standing.getMessage(league));
+            }
+            if (type.equals("matches")) {
+                message.setText(matches.getMessage(league));
+            }
+            if (type.equals("scorers")) {
+                message.setText(scorers.getMessage(league));
+            } */
+
+            // WEATHER CALLBACKS: DAILY AND HOURLY
+            if (type.equals("daily")){
                 SendPhoto photoDay = new SendPhoto();
                 SendPhoto photoNight = new SendPhoto();
-                photoDay.setChatId(chat_id);
-                photoNight.setChatId(chat_id);
-                message.setChatId(chat_id);
-                TreeMap<String,ArrayList<String>> msgs = new TreeMap<String,ArrayList<String>>();
-                if(command.equals("/weatherdaily") || command.equals("/weatherdaily ") || command.equals("Get a 5-day forecast")){
-                    msgs = Weather.getForecastDaily("hochiminh");
-                }
-                else{
-                    String[] str = command.split(" ");
-                    msgs = Weather.getForecastDaily(str[1]);
-                }
-                for (HashMap.Entry<String,ArrayList<String>> msg:msgs.entrySet()) {
-                    String strr = msg.getKey();
+                photoDay.setChatId(msg.getChatId().toString());
+                photoNight.setChatId(msg.getChatId().toString());
+                TreeMap<String,ArrayList<String>> msgs = Weather.getForecastDaily(topic);
+                
+                for (HashMap.Entry<String,ArrayList<String>> m:msgs.entrySet()) {
+                    String strr = m.getKey();
                     int first_under = strr.indexOf("Ngày");
                     int second_under = strr.indexOf("Đêm",first_under+1);
                     String messageOverall = strr.substring(0,first_under);
@@ -73,8 +131,8 @@ public class MyBot extends TelegramLongPollingBot {
                     String messageNight = strr.substring(second_under);
 
                     message.setText(messageOverall);
-                    photoDay.setPhoto(new InputFile(new File(msg.getValue().get(0)),"Day"));
-                    photoNight.setPhoto(new InputFile(new File(msg.getValue().get(1)),"Night"));
+                    photoDay.setPhoto(new InputFile(new File(m.getValue().get(0)),"Day"));
+                    photoNight.setPhoto(new InputFile(new File(m.getValue().get(1)),"Night"));
                     photoDay.setCaption(messageDay);
                     photoNight.setCaption(messageNight);
 
@@ -89,21 +147,14 @@ public class MyBot extends TelegramLongPollingBot {
                 }
                 printedMany = true; 
             }
-            else if(command.contains("/weatherhourly") || command.equals("Get a 12-hour forecast")){
+            if (type.equals("hourly")){
                 SendPhoto photo = new SendPhoto();
-                TreeMap<String,String> msgs = new TreeMap<String,String>();
-                photo.setChatId(chat_id);
-                message.setChatId(chat_id);
-                if(command.equals("/weatherhourly") || command.equals("/weatherhourly ") || command.equals("Get a 12-hour forecast")){
-                    msgs = Weather.getForecastHourly("hochiminh");
-                }
-                else{
-                    String[] str = command.split(" ");
-                    msgs = Weather.getForecastHourly(str[1]);
-                }
-                for (HashMap.Entry<String, String> msg:msgs.entrySet()) {
-                    String strr = msg.getKey();
-                    photo.setPhoto(new InputFile(new File(msg.getValue()),"Hour"));
+                photo.setChatId(msg.getChatId().toString());
+                message.setChatId(msg.getChatId().toString());
+                TreeMap<String,String> msgs = Weather.getForecastHourly(topic);
+                for (HashMap.Entry<String, String> m:msgs.entrySet()) {
+                    String strr = m.getKey();
+                    photo.setPhoto(new InputFile(new File(m.getValue()),"Hour"));
                     int breaker = strr.indexOf("Nhiệt độ");
                     message.setText(strr.substring(0,breaker));
                     photo.setCaption(strr.substring(breaker));
@@ -114,27 +165,13 @@ public class MyBot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                 }
-                printedMany = true;        
+                printedMany = true; 
             }
-            else if (command.equals("/hide")) {
-                message.setText("Keyboard hidden");
-                message.setChatId(chat_id);
-                ReplyKeyboardRemove keyboardMarkup = new ReplyKeyboardRemove(true);
-                message.setReplyMarkup(keyboardMarkup);
-            }
-            else{
-                message.setChatId(chat_id);
-                message.setText("Xin lỗi, câu lệnh của bạn không tồn tại");
-            }
-            if (!printedMany){
-                try {
-                    execute(message); // Call method to send the message
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
+
+            // OTHER CALLBACKS: ......
         }
     }
+    
 
     @Override
     public String getBotUsername() {
