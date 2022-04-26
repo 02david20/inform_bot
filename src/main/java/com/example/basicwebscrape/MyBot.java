@@ -109,12 +109,12 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         // TODO
-        return "HuuDanhBot";
+        return "infoBot";
     }
 
     @Override
     public String getBotToken() {
         // TODO
-        return "5241098510:AAFv91GSHPZSlMGgvdD3rU3d9rzpwHBadyU";
+        return "5124630324:AAGd47oSNGFSX2xhEdOmY8-G8BMD0v9rYDc";
     }
 }
