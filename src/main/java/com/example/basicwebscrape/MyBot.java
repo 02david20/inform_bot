@@ -158,12 +158,27 @@ public class MyBot extends TelegramLongPollingBot {
 			String league = data.split("_")[0];
             if (type.equals("standing")) {
                 message.setText(standing.getMessage(league));
+                try {
+                    execute(message); // Call method to send the message
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
             if (type.equals("matches")) {
                 message.setText(matches.getMessage(league));
+                try {
+                    execute(message); // Call method to send the message
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
             if (type.equals("scorers")) {
                 message.setText(scorers.getMessage(league));
+                try {
+                    execute(message); // Call method to send the message
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
 
             // WEATHER CALLBACKS: DAILY AND HOURLY
