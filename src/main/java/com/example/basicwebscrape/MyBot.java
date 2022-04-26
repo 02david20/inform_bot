@@ -107,6 +107,24 @@ public class MyBot extends TelegramLongPollingBot {
             // GOLD
             // OIL
             // FOOTBALL
+			else if (command.equals("/matches")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("matches"));
+            }
+            else if (command.equals("/standing")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("standing"));
+            }
+            else if (command.equals("/scorers")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("scorers"));
+            }
             //END QUERIES
             else if (command.equals("/hide")) {
                 message.setText("Keyboard hidden");
@@ -133,20 +151,20 @@ public class MyBot extends TelegramLongPollingBot {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String data = callbackQuery.getData();
             message.setChatId(msg.getChatId().toString());
-            /* Standing standing = new Standing();
+            Standing standing = new Standing();
             Matches matches = new Matches();
-            Scorers scorers = new Scorers(); */
+            Scorers scorers = new Scorers();
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
-            /* if (type.equals("standing")) {
-                message.setText(standing.getMessage(league));
+            if (type.equals("standing")) {
+                message.setText(standing.getMessage(topic));
             }
             if (type.equals("matches")) {
-                message.setText(matches.getMessage(league));
+                message.setText(matches.getMessage(topic));
             }
             if (type.equals("scorers")) {
-                message.setText(scorers.getMessage(league));
-            } */
+                message.setText(scorers.getMessage(topic));
+            }
 
             // WEATHER CALLBACKS: DAILY AND HOURLY
             if (type.equals("daily")){
