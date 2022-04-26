@@ -109,7 +109,7 @@ public class NewsByTopic {
 		topic3.setText("Thế giới");
 		topic3.setCallbackData("news_the-gioi");
 		InlineKeyboardButton topic4 = new InlineKeyboardButton();
-		topic4.setText("Tài chính-Kinh doanh");
+		topic4.setText("Tài chính");
 		topic4.setCallbackData("news_tai-chinh-kinh-doanh");
 		InlineKeyboardButton topic5 = new InlineKeyboardButton();
 		topic5.setText("Đời sống");
@@ -135,17 +135,14 @@ public class NewsByTopic {
 		topic11.setText("Sức khỏe");
 		topic11.setCallbackData("news_suc-khoe");
 		InlineKeyboardButton topic12 = new InlineKeyboardButton();
-		topic12.setText("Công nghệ-Game");
+		topic12.setText("Công nghệ");
 		topic12.setCallbackData("news_cong-nghe-game");
 		InlineKeyboardButton topic13 = new InlineKeyboardButton();
 		topic13.setText("Xe");
 		topic13.setCallbackData("news_xe");
 		InlineKeyboardButton topic14 = new InlineKeyboardButton();
-		topic14.setText("Thời trang trẻ");
-		topic14.setCallbackData("news_thoi-trang-tre");
-		InlineKeyboardButton topic15 = new InlineKeyboardButton();
-		topic15.setText("Bạn đọc");
-		topic15.setCallbackData("news_ban-doc");
+		topic14.setText("Bạn đọc");
+		topic14.setCallbackData("news_ban-doc");
 		
 		button_list.add(latestNews);
 		
@@ -153,19 +150,18 @@ public class NewsByTopic {
 		button_list1.add(topic2);
 		button_list1.add(topic3);
 		button_list1.add(topic4);
-		button_list1.add(topic5);
 		
+		button_list2.add(topic5);		
 		button_list2.add(topic6);
 		button_list2.add(topic7);
 		button_list2.add(topic8);
 		button_list2.add(topic9);
-		button_list2.add(topic10);
 		
+		button_list3.add(topic10);		
 		button_list3.add(topic11);
 		button_list3.add(topic12);
 		button_list3.add(topic13);
 		button_list3.add(topic14);
-		button_list3.add(topic15);
 		
 		buttons.add(button_list);
 		buttons.add(button_list1);
