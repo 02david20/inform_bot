@@ -2,9 +2,11 @@ package com.example.basicwebscrape.news;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -21,6 +23,7 @@ class Topic {
 	public String getUrl() {
 		return this.url;
 	}
+	
 }
 
 public class NewsByTopic {
@@ -46,6 +49,43 @@ public class NewsByTopic {
         }
         return lstPost.attr("href");
     }
+	
+	public String randomNews() {
+		Document doc = null;
+		Elements lstPost = null;
+		try {
+            doc = Jsoup
+                    .connect(this.topic.getUrl())
+                    .userAgent("Jsoup client")
+                    .timeout(20000).get();
+            lstPost = doc.select("div.relative article a.story__thumb");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		Random rand = new Random();
+		Element randomPost = lstPost.get(rand.nextInt(lstPost.size()));
+		return randomPost.attr("href");
+	}
+	
+	public static InlineKeyboardMarkup setNext() {
+		InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+		List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
+		List < InlineKeyboardButton > button_list = new ArrayList<>();
+		
+		InlineKeyboardButton nextButton = new InlineKeyboardButton();
+		nextButton.setText("Tiếp tục");
+		nextButton.setCallbackData("news_next");
+		InlineKeyboardButton returnButton = new InlineKeyboardButton();
+		returnButton.setText("Trở lại");
+		returnButton.setCallbackData("news_return");
+		
+		button_list.add(nextButton);
+		button_list.add(returnButton);
+		buttons.add(button_list);		
+		markupInline.setKeyboard(buttons);
+		return markupInline;
+	}
 	
 	public static InlineKeyboardMarkup setButtons() {
 		InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

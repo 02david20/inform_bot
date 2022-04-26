@@ -23,6 +23,7 @@ import java.util.TreeMap;
 import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
 public class MyBot extends TelegramLongPollingBot {
+	static String topicNews;
     @Override
     public void onUpdateReceived(Update update) {
         // TODO
@@ -177,15 +178,32 @@ public class MyBot extends TelegramLongPollingBot {
 
             // OTHER CALLBACKS: ......
             if (topic.equals("news")) {
-            	NewsByTopic news;
-            	if (type.equals("latest")) {
-            		news = new NewsByTopic();
+            	if (type.equals("next")) {
+            		NewsByTopic news = new NewsByTopic(topicNews);
+                	message.setChatId(msg.getChatId().toString());
+                	message.setText(news.randomNews());
+                	message.setReplyMarkup(NewsByTopic.setNext());
+            	}
+            	else if (type.equals("return")) {
+            		message.setChatId(msg.getChatId().toString());
+                    message.setText("Select Topic");
+                    message.setReplyMarkup(NewsByTopic.setButtons());
             	}
             	else {
-            		news = new NewsByTopic(type);
+            		NewsByTopic news;
+	            	if (type.equals("latest")) {
+	            		news = new NewsByTopic();
+	            		message.setChatId(msg.getChatId().toString());
+		            	message.setText(news.getNewsByTopic());
+	            	}
+	            	else {
+	            		news = new NewsByTopic(type);
+	            		topicNews = type;
+	            		message.setChatId(msg.getChatId().toString());
+		            	message.setText(news.getNewsByTopic());
+		            	message.setReplyMarkup(NewsByTopic.setNext());
+	            	}
             	}
-            	message.setChatId(msg.getChatId().toString());
-            	message.setText(news.getNewsByTopic());
             	try {
                     execute(message);
                 } catch (TelegramApiException e) {
