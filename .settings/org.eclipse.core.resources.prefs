@@ -1,3 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/example/basicwebscrape/MyBot.java=UTF-8
+encoding//src/main/java/com/example/basicwebscrape/OilPrice/OilPrice.java=UTF-8
 encoding//src/main/java/com/example/basicwebscrape/news/NewsByTopic.java=UTF-8
+encoding//src/main/java/com/example/basicwebscrape/weather/Weather.java=UTF-8
+encoding//src/main/java/com/example/basicwebscrape/weather/WeatherDaily.java=UTF-8
+encoding//src/main/java/com/example/basicwebscrape/weather/WeatherHourly.java=UTF-8

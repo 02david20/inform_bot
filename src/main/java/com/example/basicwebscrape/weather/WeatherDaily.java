@@ -211,4 +211,3 @@ public class WeatherDaily {
         return result;   
     }
 }
-
