@@ -7,6 +7,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.json.*;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 public class Weather {
     private static HashMap<String,Integer> cities;
@@ -93,4 +95,48 @@ public class Weather {
             return null;
         }
     }
+    
+    public static InlineKeyboardMarkup setButtons() {
+		InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+		List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
+		List < InlineKeyboardButton > button_list1 = new ArrayList<>();
+		List < InlineKeyboardButton > button_list2 = new ArrayList<>();
+		List < InlineKeyboardButton > button_list3 = new ArrayList<>();
+
+		InlineKeyboardButton hn1 = new InlineKeyboardButton();
+		hn1.setText("Hà Nội - 12 giờ");
+		hn1.setCallbackData("hanoi_hourly");
+		InlineKeyboardButton hn2 = new InlineKeyboardButton();
+		hn2.setText("Hà Nội - 5 ngày");
+		hn2.setCallbackData("hanoi_daily");
+
+		InlineKeyboardButton dn1 = new InlineKeyboardButton();
+        dn1.setText("Đà Nẵng - 12 giờ");
+		dn1.setCallbackData("danang_hourly");
+		InlineKeyboardButton dn2 = new InlineKeyboardButton();
+		dn2.setText("Đà Nẵng - 5 ngày");
+		dn2.setCallbackData("danang_daily");
+
+		InlineKeyboardButton hcm1 = new InlineKeyboardButton();
+		hcm1.setText("TP.HCM - 12 giờ");
+		hcm1.setCallbackData("hochiminh_hourly");
+		InlineKeyboardButton hcm2 = new InlineKeyboardButton();
+		hcm2.setText("TP.HCM - 5 ngày");
+		hcm2.setCallbackData("hochiminh_daily");
+		
+		
+		button_list1.add(hn1);
+		button_list1.add(hn2);
+		button_list2.add(dn1);
+		button_list2.add(dn2);
+		button_list3.add(hcm1);
+		button_list3.add(hcm2);
+		
+		buttons.add(button_list1);
+		buttons.add(button_list2);
+		buttons.add(button_list3);
+		markupInline.setKeyboard(buttons);
+		
+		return markupInline;
+	}
 }
