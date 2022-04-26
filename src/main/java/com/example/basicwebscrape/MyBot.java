@@ -110,20 +110,17 @@ public class MyBot extends TelegramLongPollingBot {
 			else if (command.equals("/matches")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
-            	Buttons buttons = new Buttons();
-				message.setReplyMarkup(buttons.setButtons("matches"));
+				message.setReplyMarkup(Buttons.setButtons("matches"));
             }
             else if (command.equals("/standing")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
-            	Buttons buttons = new Buttons();
-				message.setReplyMarkup(buttons.setButtons("standing"));
+				message.setReplyMarkup(Buttons.setButtons("standing"));
             }
             else if (command.equals("/scorers")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
-            	Buttons buttons = new Buttons();
-				message.setReplyMarkup(buttons.setButtons("scorers"));
+				message.setReplyMarkup(Buttons.setButtons("scorers"));
             }
             //END QUERIES
             else if (command.equals("/hide")) {
