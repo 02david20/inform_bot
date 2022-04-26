@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.example.basicwebscrape.football.*;
+
 import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
 public class MyBot extends TelegramLongPollingBot {
@@ -129,7 +131,7 @@ public class MyBot extends TelegramLongPollingBot {
 
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
-
+            System.out.println(topic + "\n" + type);
           // FOOTBALL
           Standing standing = new Standing();
                 Matches matches = new Matches();
