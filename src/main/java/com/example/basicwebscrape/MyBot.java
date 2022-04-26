@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
 public class MyBot extends TelegramLongPollingBot {
     @Override
@@ -70,6 +71,12 @@ public class MyBot extends TelegramLongPollingBot {
             }
             //YOUR COMMAND HERE
             // NEWS
+            else if (command.equals("/news") || command.equals("News and Topic")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+                message.setText("Select Topic");
+
+                message.setReplyMarkup(NewsByTopic.setButtons());
+            }
             // GOLD
             // OIL
             // FOOTBALL
@@ -169,6 +176,22 @@ public class MyBot extends TelegramLongPollingBot {
             }
 
             // OTHER CALLBACKS: ......
+            if (topic.equals("news")) {
+            	NewsByTopic news;
+            	if (type.equals("latest")) {
+            		news = new NewsByTopic();
+            	}
+            	else {
+            		news = new NewsByTopic(type);
+            	}
+            	message.setChatId(msg.getChatId().toString());
+            	message.setText(news.getNewsByTopic());
+            	try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     
