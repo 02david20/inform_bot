@@ -151,19 +151,22 @@ public class MyBot extends TelegramLongPollingBot {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String data = callbackQuery.getData();
             message.setChatId(msg.getChatId().toString());
-            Standing standing = new Standing();
-            Matches matches = new Matches();
-            Scorers scorers = new Scorers();
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
+
+			// FOOTBALL
+			Standing standing = new Standing();
+            Matches matches = new Matches();
+            Scorers scorers = new Scorers();
+			String league = data.split("_")[0];
             if (type.equals("standing")) {
-                message.setText(standing.getMessage(topic));
+                message.setText(standing.getMessage(league));
             }
             if (type.equals("matches")) {
-                message.setText(matches.getMessage(topic));
+                message.setText(matches.getMessage(league));
             }
             if (type.equals("scorers")) {
-                message.setText(scorers.getMessage(topic));
+                message.setText(scorers.getMessage(league));
             }
 
             // WEATHER CALLBACKS: DAILY AND HOURLY
