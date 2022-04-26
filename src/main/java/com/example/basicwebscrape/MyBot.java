@@ -152,12 +152,9 @@ public class MyBot extends TelegramLongPollingBot {
             String type = data.split("_")[1];
 
 			// FOOTBALL
-			Standing standing = new Standing();
-            Matches matches = new Matches();
-            Scorers scorers = new Scorers();
 			String league = data.split("_")[0];
             if (type.equals("standing")) {
-                message.setText(standing.getMessage(league));
+                message.setText(Standing.getMessage(league));
                 try {
                     execute(message); // Call method to send the message
                 } catch (TelegramApiException e) {
@@ -165,7 +162,7 @@ public class MyBot extends TelegramLongPollingBot {
                 }
             }
             if (type.equals("matches")) {
-                message.setText(matches.getMessage(league));
+                message.setText(Matches.getMessage(league));
                 try {
                     execute(message); // Call method to send the message
                 } catch (TelegramApiException e) {
@@ -173,7 +170,7 @@ public class MyBot extends TelegramLongPollingBot {
                 }
             }
             if (type.equals("scorers")) {
-                message.setText(scorers.getMessage(league));
+                message.setText(Scorers.getMessage(league));
                 try {
                     execute(message); // Call method to send the message
                 } catch (TelegramApiException e) {

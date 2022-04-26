@@ -7,13 +7,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class Standing {
-	private Map<String, String> urls;
-	private Map<String, String> leagues;
-	
-	public Standing() {
+public class Standing {	
+	public static String getMessage(String league) {
 		// league urls
-    	this.urls = new HashMap<String, String>();
+    	Map<String, String> urls = new HashMap<String, String>();
     	urls.put("England", "https://www.livescores.com/football/england/premier-league/?tz=7");
     	urls.put("Spain", "https://www.livescores.com/football/spain/laliga-santander/?tz=7");
     	urls.put("Italy", "https://www.livescores.com/football/italy/serie-a/?tz=7");
@@ -22,16 +19,14 @@ public class Standing {
     	urls.put("Vietnam", "https://www.livescores.com/football/vietnam/v-league/?tz=7");
     	
     	// name league
-    	this.leagues = new HashMap<String, String>();
+    	Map<String, String> leagues = new HashMap<String, String>();
     	leagues.put("England", "Premier League");
     	leagues.put("Spain", "Laliga Santader");
     	leagues.put("Italy", "Serie A");
     	leagues.put("Germany", "Bundesliga");
     	leagues.put("France", "Ligue 1");
     	leagues.put("Vietnam", "V-League");
-	}
-	
-	public String getMessage(String league) {
+
 		String url = urls.get(league);
 		String name = leagues.get(league);
     	String msg = "";
@@ -59,7 +54,7 @@ public class Standing {
     	return msg;
     }
 	
-	public String convert(String paras) {
+	public static String convert(String paras) {
     	String[] temp = paras.split(" ");
     	paras = "";
     	paras += "P:" + temp[0] + ", ";
