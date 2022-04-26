@@ -27,11 +27,8 @@ import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
 import com.example.basicwebscrape.OilPrice.*;
 public class MyBot extends TelegramLongPollingBot {
-<<<<<<< HEAD
 	static String topicNews;
-=======
 	private GoldPrice crawler = new GoldPrice();
->>>>>>> 0cbe7b636433541255d206bc3fb3c40b2b5f6b12
     @Override
     public void onUpdateReceived(Update update) {
         // TODO
@@ -350,6 +347,6 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         // TODO
-        return "5124630324:AAGd47oSNGFSX2xhEdOmY8-G8BMD0v9rYDc";
+        return "5336710924:AAFeLLC8O7ScaBwNWv-o_Jo_jAIJbFl3WdY";
     }
 }
