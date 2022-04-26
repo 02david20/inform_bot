@@ -1,7 +1,5 @@
 package com.example.Vu;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,14 +7,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class VuTran extends TelegramLongPollingBot {
     public String getOilPrice() {
-        try {
-            String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
-            Document doc = Jsoup.connect(url).get();
-            return OilPrice.returnOilPrice(doc, url);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Có lỗi xảy ra";
-        }
+        String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
+        return OilPrice.returnOilPrice(url);
     }
 
     @Override
