@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
 public class MyBot extends TelegramLongPollingBot {
     @Override
@@ -42,6 +43,7 @@ public class MyBot extends TelegramLongPollingBot {
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setText("Menu");
 
+
                 ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
                 List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -55,6 +57,7 @@ public class MyBot extends TelegramLongPollingBot {
                 keyboard.add(row);
                 
                 row = new KeyboardRow();
+
                 row.add("Oil Price");
                 row.add("Gold Price");
                 keyboard.add(row);
@@ -70,10 +73,18 @@ public class MyBot extends TelegramLongPollingBot {
             }
             //YOUR COMMAND HERE
             // NEWS
+
+            else if (command.equals("/news") || command.equals("News and Topic")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+                message.setText("Select Topic");
+
+                message.setReplyMarkup(NewsByTopic.setButtons());
+            }
+
             // GOLD
             // OIL
             // FOOTBALL
-			else if (command.equals("/matches")) {
+			  else if (command.equals("/matches")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
 				message.setReplyMarkup(Buttons.setButtons("matches"));
@@ -88,6 +99,7 @@ public class MyBot extends TelegramLongPollingBot {
             	message.setText("Chọn giải đấu");
 				message.setReplyMarkup(Buttons.setButtons("scorers"));
             }
+
             //END QUERIES
             else if (command.equals("/hide")) {
                 message.setText("Keyboard hidden");
@@ -114,15 +126,16 @@ public class MyBot extends TelegramLongPollingBot {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String data = callbackQuery.getData();
             message.setChatId(msg.getChatId().toString());
+
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
 
-			// FOOTBALL
-			Standing standing = new Standing();
-            Matches matches = new Matches();
-            Scorers scorers = new Scorers();
-			String league = data.split("_")[0];
-            if (type.equals("standing")) {
+          // FOOTBALL
+          Standing standing = new Standing();
+                Matches matches = new Matches();
+                Scorers scorers = new Scorers();
+          String league = data.split("_")[0];
+                if (type.equals("standing")) {
                 message.setText(standing.getMessage(league));
             }
             if (type.equals("matches")) {
@@ -130,6 +143,7 @@ public class MyBot extends TelegramLongPollingBot {
             }
             if (type.equals("scorers")) {
                 message.setText(scorers.getMessage(league));
+
             }
 
             // WEATHER CALLBACKS: DAILY AND HOURLY
@@ -184,21 +198,39 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 }
                 printedMany = true; 
+
             }
 
             // OTHER CALLBACKS: ......
+            if (topic.equals("news")) {
+            	NewsByTopic news;
+            	if (type.equals("latest")) {
+            		news = new NewsByTopic();
+            	}
+            	else {
+            		news = new NewsByTopic(type);
+            	}
+            	message.setChatId(msg.getChatId().toString());
+            	message.setText(news.getNewsByTopic());
+            	try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     
+
     @Override
     public String getBotUsername() {
         // TODO
-        return "saka12_bot";
+        return "InfoBot";
     }
 
     @Override
     public String getBotToken() {
         // TODO
-        return "5117983190:AAEXlcpIKO2tcMO7JKSu8CLkh350RRDuR3w";
+        return "5124630324:AAGd47oSNGFSX2xhEdOmY8-G8BMD0v9rYDc";
     }
 }
