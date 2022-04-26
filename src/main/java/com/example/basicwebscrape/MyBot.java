@@ -28,6 +28,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.basicwebscrape.football.*;
 
 
 import com.vdurmont.emoji.EmojiParser;
@@ -138,7 +150,16 @@ public class MyBot extends TelegramLongPollingBot {
             String command = update.getMessage().getText();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.enableHtml(true);
-            if(command.equals("/myname")){
+            message.setChatId(update.getMessage().getChatId().toString());
+            message.setText("Câu lệnh không hợp lệ");
+            if (command.equals("/infobot")) {
+            	String msg = "Đây là con bot nhỏ của một thằng ngông cuồng.";
+            	message.setChatId(update.getMessage().getChatId().toString());
+                message.setText(msg);
+            }
+            else if (command.equals("/start")){
+                String msg = "Gõ / để hiện danh sách các lệnh.";
+            else if(command.equals("/myname")){
                 String msg = getBotUsername();
                 message.setChatId(chat_id);
                 message.setText(msg);   
@@ -254,14 +275,60 @@ public class MyBot extends TelegramLongPollingBot {
                        }
                 		
                 }
-             
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.enableMarkdown(true);
                 message.setText(msg);
-                
             }
-            
-            else if(command.contains("/weatherhourly") || command.equals("Get a 12-hour forecast")){
+
+            else if (command.equals("/matches")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("matches"));
+            }
+            else if (command.equals("/standing")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("standing"));
+            }
+            else if (command.equals("/scorers")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("scorers"));
+            }
+            try {
+                execute(message); // Call method to send the message
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.hasCallbackQuery()) {
+        	Message msg = update.getCallbackQuery().getMessage();
+        	CallbackQuery callbackQuery = update.getCallbackQuery();
+        	String data = callbackQuery.getData();
+        	SendMessage message = new SendMessage();
+        	message.setChatId(msg.getChatId().toString());
+        	Standing standing = new Standing();
+        	Matches matches = new Matches();
+        	Scorers scorers = new Scorers();
+        	String league = data.split("_")[0];
+        	String type = data.split("_")[1];
+        	
+        	if (type.equals("standing")) {
+        		message.setText(standing.getMessage(league));
+        	}
+        	if (type.equals("matches")) {
+        		message.setText(matches.getMessage(league));
+        	}
+        	if (type.equals("scorers")) {
+        		message.setText(scorers.getMessage(league));
+        	}
+        }
+
+           
+           else if(command.contains("/weatherhourly") || command.equals("Get a 12-hour forecast")){
                 SendPhoto photo = new SendPhoto();
                 TreeMap<String,String> msgs = new TreeMap<String,String>();
                 photo.setChatId(chat_id);
