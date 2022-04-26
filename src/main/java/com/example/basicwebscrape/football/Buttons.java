@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 public class Buttons {
-	public InlineKeyboardMarkup setButtons(String type) {
+	public static InlineKeyboardMarkup setButtons(String type) {
 		InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 		List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
 		List < InlineKeyboardButton > button_list1 = new ArrayList<>();
@@ -31,7 +31,7 @@ public class Buttons {
 		france.setCallbackData("France_" + type);
 		InlineKeyboardButton vietnam = new InlineKeyboardButton();
 		vietnam.setText("V-League");
-		vietnam.setCallbackData("Vietnam_matches");
+		vietnam.setCallbackData("Vietnam_" + type);
 		
 		button_list1.add(england);
 		button_list1.add(spain);

@@ -43,6 +43,7 @@ public class MyBot extends TelegramLongPollingBot {
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setText("Menu");
 
+
                 ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
                 List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -56,6 +57,7 @@ public class MyBot extends TelegramLongPollingBot {
                 keyboard.add(row);
                 
                 row = new KeyboardRow();
+
                 row.add("Oil Price");
                 row.add("Gold Price");
                 keyboard.add(row);
@@ -71,15 +73,33 @@ public class MyBot extends TelegramLongPollingBot {
             }
             //YOUR COMMAND HERE
             // NEWS
+
             else if (command.equals("/news") || command.equals("News and Topic")) {
             	message.setChatId(update.getMessage().getChatId().toString());
                 message.setText("Select Topic");
 
                 message.setReplyMarkup(NewsByTopic.setButtons());
             }
+
             // GOLD
             // OIL
             // FOOTBALL
+			  else if (command.equals("/matches")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+				message.setReplyMarkup(Buttons.setButtons("matches"));
+            }
+            else if (command.equals("/standing")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+				message.setReplyMarkup(Buttons.setButtons("standing"));
+            }
+            else if (command.equals("/scorers")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+            	message.setText("Chọn giải đấu");
+				message.setReplyMarkup(Buttons.setButtons("scorers"));
+            }
+
             //END QUERIES
             else if (command.equals("/hide")) {
                 message.setText("Keyboard hidden");
@@ -106,12 +126,16 @@ public class MyBot extends TelegramLongPollingBot {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String data = callbackQuery.getData();
             message.setChatId(msg.getChatId().toString());
-            /* Standing standing = new Standing();
-            Matches matches = new Matches();
-            Scorers scorers = new Scorers(); */
+
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
-            /* if (type.equals("standing")) {
+
+          // FOOTBALL
+          Standing standing = new Standing();
+                Matches matches = new Matches();
+                Scorers scorers = new Scorers();
+          String league = data.split("_")[0];
+                if (type.equals("standing")) {
                 message.setText(standing.getMessage(league));
             }
             if (type.equals("matches")) {
@@ -119,7 +143,8 @@ public class MyBot extends TelegramLongPollingBot {
             }
             if (type.equals("scorers")) {
                 message.setText(scorers.getMessage(league));
-            } */
+
+            }
 
             // WEATHER CALLBACKS: DAILY AND HOURLY
             if (type.equals("daily")){
@@ -173,6 +198,7 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 }
                 printedMany = true; 
+
             }
 
             // OTHER CALLBACKS: ......
@@ -199,12 +225,12 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         // TODO
-        return "hungBot";
+        return "InfoBot";
     }
 
     @Override
     public String getBotToken() {
         // TODO
-        return "5336710924:AAFeLLC8O7ScaBwNWv-o_Jo_jAIJbFl3WdY";
+        return "5124630324:AAGd47oSNGFSX2xhEdOmY8-G8BMD0v9rYDc";
     }
 }
