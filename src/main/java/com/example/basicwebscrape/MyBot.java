@@ -55,128 +55,20 @@ public class MyBot extends TelegramLongPollingBot {
             else if (command.equals("/matches")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
-            	//Buttons
-				InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-				List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
-				List < InlineKeyboardButton > button_list1 = new ArrayList<>();
-				List < InlineKeyboardButton > button_list2 = new ArrayList<>();
-				List < InlineKeyboardButton > button_list3 = new ArrayList<>();
-
-				InlineKeyboardButton england = new InlineKeyboardButton();
-				england.setText("Premier League");
-				england.setCallbackData("England_matches");
-				InlineKeyboardButton spain = new InlineKeyboardButton();
-				spain.setText("Laliga Santander");
-				spain.setCallbackData("Spain_matches");
-				InlineKeyboardButton italy = new InlineKeyboardButton();
-				italy.setText("Serie A");
-				italy.setCallbackData("Italy_matches");
-				InlineKeyboardButton germany = new InlineKeyboardButton();
-				germany.setText("Bundesliga");
-				germany.setCallbackData("Germany_matches");
-				InlineKeyboardButton france = new InlineKeyboardButton();
-				france.setText("Ligue 1");
-				france.setCallbackData("France_matches");
-				InlineKeyboardButton vietnam = new InlineKeyboardButton();
-				vietnam.setText("V-League");
-				vietnam.setCallbackData("Vietnam_matches");
-				
-				button_list1.add(england);
-				button_list1.add(spain);
-				button_list2.add(italy);
-				button_list2.add(germany);
-				button_list3.add(france);
-				button_list3.add(vietnam);
-				
-				buttons.add(button_list1);
-				buttons.add(button_list2);
-				buttons.add(button_list3);
-				markupInline.setKeyboard(buttons);
-				message.setReplyMarkup(markupInline);
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("matches"));
             }
             else if (command.equals("/standing")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
-            	//Buttons
-				InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-				List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
-				List < InlineKeyboardButton > button_list1 = new ArrayList<>();
-				List < InlineKeyboardButton > button_list2 = new ArrayList<>();
-				List < InlineKeyboardButton > button_list3 = new ArrayList<>();
-
-				InlineKeyboardButton england = new InlineKeyboardButton();
-				england.setText("Premier League");
-				england.setCallbackData("England_standing");
-				InlineKeyboardButton spain = new InlineKeyboardButton();
-				spain.setText("Laliga Santander");
-				spain.setCallbackData("Spain_standing");
-				InlineKeyboardButton italy = new InlineKeyboardButton();
-				italy.setText("Serie A");
-				italy.setCallbackData("Italy_standing");
-				InlineKeyboardButton germany = new InlineKeyboardButton();
-				germany.setText("Bundesliga");
-				germany.setCallbackData("Germany_standing");
-				InlineKeyboardButton france = new InlineKeyboardButton();
-				france.setText("Ligue 1");
-				france.setCallbackData("France_standing");
-				InlineKeyboardButton vietnam = new InlineKeyboardButton();
-				vietnam.setText("V-League");
-				vietnam.setCallbackData("Vietnam_standing");
-				
-				button_list1.add(england);
-				button_list1.add(spain);
-				button_list2.add(italy);
-				button_list2.add(germany);
-				button_list3.add(france);
-				button_list3.add(vietnam);
-				
-				buttons.add(button_list1);
-				buttons.add(button_list2);
-				buttons.add(button_list3);
-				markupInline.setKeyboard(buttons);
-				message.setReplyMarkup(markupInline);
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("standing"));
             }
             else if (command.equals("/scorers")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
-            	//Buttons
-				InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-				List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
-				List < InlineKeyboardButton > button_list1 = new ArrayList<>();
-				List < InlineKeyboardButton > button_list2 = new ArrayList<>();
-				List < InlineKeyboardButton > button_list3 = new ArrayList<>();
-
-				InlineKeyboardButton england = new InlineKeyboardButton();
-				england.setText("Premier League");
-				england.setCallbackData("England_scorers");
-				InlineKeyboardButton spain = new InlineKeyboardButton();
-				spain.setText("Laliga Santander");
-				spain.setCallbackData("Spain_scorers");
-				InlineKeyboardButton italy = new InlineKeyboardButton();
-				italy.setText("Serie A");
-				italy.setCallbackData("Italy_scorers");
-				InlineKeyboardButton germany = new InlineKeyboardButton();
-				germany.setText("Bundesliga");
-				germany.setCallbackData("Germany_scorers");
-				InlineKeyboardButton france = new InlineKeyboardButton();
-				france.setText("Ligue 1");
-				france.setCallbackData("France_scorers");
-				InlineKeyboardButton vietnam = new InlineKeyboardButton();
-				vietnam.setText("V-League");
-				vietnam.setCallbackData("Vietnam_scorers");
-				
-				button_list1.add(england);
-				button_list1.add(spain);
-				button_list2.add(italy);
-				button_list2.add(germany);
-				button_list3.add(france);
-				button_list3.add(vietnam);
-				
-				buttons.add(button_list1);
-				buttons.add(button_list2);
-				buttons.add(button_list3);
-				markupInline.setKeyboard(buttons);
-				message.setReplyMarkup(markupInline);
+            	Buttons buttons = new Buttons();
+				message.setReplyMarkup(buttons.setButtons("scorers"));
             }
             try {
                 execute(message); // Call method to send the message
