@@ -1,4 +1,4 @@
-package com.example.Vu;
+package com.example.basicwebscrape.OilPrice;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

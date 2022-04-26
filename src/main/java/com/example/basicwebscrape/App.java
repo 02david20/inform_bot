@@ -1,4 +1,4 @@
-package com.example.Vu;
+package com.example.basicwebscrape;
 
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -9,7 +9,7 @@ public class App {
 
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new VuTran());
+            botsApi.registerBot(new MyBot());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

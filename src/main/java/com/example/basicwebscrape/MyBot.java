@@ -1,11 +1,11 @@
-package com.example.Vu;
+package com.example.basicwebscrape;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class VuTran extends TelegramLongPollingBot {
+public class MyBot extends TelegramLongPollingBot {
     public String getOilPrice() {
         String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
         return OilPrice.returnOilPrice(url);
