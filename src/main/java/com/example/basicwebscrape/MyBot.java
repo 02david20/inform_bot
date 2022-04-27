@@ -1,23 +1,6 @@
 package com.example.basicwebscrape;
-import java.io.PrintStream;
-
 
 import java.io.*;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.io.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -31,31 +14,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.basicwebscrape.football.*;
-
 
 import com.vdurmont.emoji.EmojiParser;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.example.basicwebscrape.gold.GoldPrice;
+import com.example.basicwebscrape.football.*;
+import com.example.basicwebscrape.gold.*;
+import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
-
+import com.example.basicwebscrape.OilPrice.*;
 public class MyBot extends TelegramLongPollingBot {
+	private GoldPrice crawler = new GoldPrice();
     @Override
     public void onUpdateReceived(Update update) {
         // TODO
@@ -76,6 +48,7 @@ public class MyBot extends TelegramLongPollingBot {
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setText("Menu");
 
+
                 ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
                 List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -89,6 +62,7 @@ public class MyBot extends TelegramLongPollingBot {
                 keyboard.add(row);
                 
                 row = new KeyboardRow();
+
                 row.add("Oil Price");
                 row.add("Gold Price");
                 keyboard.add(row);
@@ -104,10 +78,103 @@ public class MyBot extends TelegramLongPollingBot {
             }
             //YOUR COMMAND HERE
             // NEWS
+
+            else if (command.equals("/news") || command.equals("News and Topic")) {
+            	message.setChatId(update.getMessage().getChatId().toString());
+                message.setText("Select Topic");
+
+                message.setReplyMarkup(NewsByTopic.setButtons());
+            }
+
             // GOLD
             // OIL
+            else if(command.equals("Gold Price")) {
+            	String msg = "";
+                List<String> IDs = new ArrayList<>(GoldPrice.urlMap.keySet());
+               	for (String ID :IDs) {
+               		msg += "* "+ID+" :\n"+GoldPrice.getPrice(ID) + "\n----------\n";
+               	}
+               	msg = EmojiParser.parseToUnicode(msg);
+               	message.setChatId(update.getMessage().getChatId().toString());
+                message.setText(msg);
+                try {
+					execute(message);
+				} catch (TelegramApiException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+               	msg = "Hãy nhập vào lệnh: \n"
+            			+ ":information_source: Định dạng /gold:\n"
+            			+ "/gold all\n"
+            			+ "/gold key\n"
+            			+ "/gold key history\n"
+            			+ "\nkey:\n";
+            	for (String k : GoldPrice.urlMap.keySet()) {
+            		msg += k+"\n";
+            	}
+            	msg = EmojiParser.parseToUnicode(msg);
+            	message.setChatId(update.getMessage().getChatId().toString());
+                message.setText(msg);
+               
+            }
+            else if(command.contains("/gold")){
+            	
+                String[] str = command.split(" ");
+                String msg = "";
+
+                if(str.length == 1) {
+                     	
+                	msg = ":information_source: Định dạng /gold:\n"
+                			+ "/gold all\n"
+                			+ "/gold key\n"
+                			+ "/gold key history\n"
+                			+ "\nkey:\n";
+                	for (String k : GoldPrice.urlMap.keySet()) {
+                		msg += k+"\n";
+                	}
+                	msg = EmojiParser.parseToUnicode(msg);
+                }
+                else {
+                	msg += "Đơn vị (đồng/lượng)\n\n";
+                	   if(str[1].equals("all")) {
+	                       	List<String> IDs = new ArrayList<>(GoldPrice.urlMap.keySet());
+	                       	for (String ID :IDs) {
+	                       		msg += "* "+ID+" :\n"+GoldPrice.getPrice(ID) + "\n----------\n";
+	                       	}
+	                       	msg = EmojiParser.parseToUnicode(msg);
+
+                       }else {
+                  
+	                       	if(!GoldPrice.dataMap.containsKey(str[1])) {
+	                       		 msg = "ID không tồn tại";
+	                       	}else {
+	                       			if(str.length == 2) {
+	                       				msg += GoldPrice.getPrice(str[1]);
+	                       				msg = EmojiParser.parseToUnicode(msg);
+	                       			}else if(str.length == 3) {
+	                       				if(str[2].equals("history")) {
+	                       					msg += GoldPrice.get_history(str[1]);
+	                       					msg = EmojiParser.parseToUnicode(msg);
+	                       				}else {
+	                       				
+	                       					msg = "Câu lệnh không hợp lệ";
+	                       				}
+	                       			}else {
+	                       				
+	                       				msg = "Câu lệnh không hợp lệ";
+	                       			}
+		       	                	
+	                       	}
+                       }
+                		
+                }
+             
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setText(msg);
+                
+            }
             // FOOTBALL
-			else if (command.equals("/matches")) {
+			  else if (command.equals("/matches")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn giải đấu");
 				message.setReplyMarkup(Buttons.setButtons("matches"));
@@ -122,12 +189,20 @@ public class MyBot extends TelegramLongPollingBot {
             	message.setText("Chọn giải đấu");
 				message.setReplyMarkup(Buttons.setButtons("scorers"));
             }
+
             //END QUERIES
             else if (command.equals("/hide")) {
                 message.setText("Keyboard hidden");
                 message.setChatId(update.getMessage().getChatId().toString());
                 ReplyKeyboardRemove keyboardMarkup = new ReplyKeyboardRemove(true);
                 message.setReplyMarkup(keyboardMarkup);
+            }
+            //OIL
+            else if(command.equals("/oilprice") || command.equals("Oil Price")){
+                String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
+                String msg=OilPrice.returnOilPrice(url);
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setText(msg);
             }
             else{
                 message.setChatId(update.getMessage().getChatId().toString());
@@ -147,12 +222,16 @@ public class MyBot extends TelegramLongPollingBot {
             Message msg = update.getCallbackQuery().getMessage();
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String data = callbackQuery.getData();
+            System.out.println(data);
             message.setChatId(msg.getChatId().toString());
+
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
 
-			// FOOTBALL
-			String league = data.split("_")[0];
+
+          // FOOTBALL
+          String league = data.split("_")[0];
+
             if (type.equals("standing")) {
                 message.setText(Standing.getMessage(league));
                 try {
@@ -210,11 +289,6 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 }
                 printedMany = true; 
-                try {
-                    execute(message); // Call method to send the message
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
             }
             if (type.equals("hourly")){
                 SendPhoto photo = new SendPhoto();
@@ -235,16 +309,34 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 }
                 printedMany = true; 
+
             }
 
             // OTHER CALLBACKS: ......
+            if (topic.equals("news")) {
+            	NewsByTopic news;
+            	if (type.equals("latest")) {
+            		news = new NewsByTopic();
+            	}
+            	else {
+            		news = new NewsByTopic(type);
+            	}
+            	message.setChatId(msg.getChatId().toString());
+            	message.setText(news.getNewsByTopic());
+            	try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     
+
     @Override
     public String getBotUsername() {
         // TODO
-        return "infoBot";
+        return "InfoBot";
     }
 
     @Override
