@@ -175,20 +175,10 @@ public class MyBot extends TelegramLongPollingBot {
                 
             }
             // FOOTBALL
-			  else if (command.equals("/matches")) {
+            else if (command.equals("/football")) {
             	message.setChatId(update.getMessage().getChatId().toString());
-            	message.setText("Chọn giải đấu");
-				message.setReplyMarkup(Buttons.setButtons("matches"));
-            }
-            else if (command.equals("/standing")) {
-            	message.setChatId(update.getMessage().getChatId().toString());
-            	message.setText("Chọn giải đấu");
-				message.setReplyMarkup(Buttons.setButtons("standing"));
-            }
-            else if (command.equals("/scorers")) {
-            	message.setChatId(update.getMessage().getChatId().toString());
-            	message.setText("Chọn giải đấu");
-				message.setReplyMarkup(Buttons.setButtons("scorers"));
+            	message.setText("Chọn một trong các mục sau");
+            	message.setReplyMarkup(Buttons.setButtons1());
             }
 
             //END QUERIES
@@ -229,34 +219,43 @@ public class MyBot extends TelegramLongPollingBot {
             String topic = data.split("_")[0];
             String type = data.split("_")[1];
 
-
-          // FOOTBALL
-          String league = data.split("_")[0];
-
-            if (type.equals("standing")) {
-                message.setText(Standing.getMessage(league));
-                try {
+            // FOOTBALL
+            String league = data.split("_")[0];
+          	if (league.equals("no")) {
+          		message.setText("Chọn giải đấu");
+          		message.setReplyMarkup(Buttons.setButtons2(type));
+          		try {
                     execute(message); // Call method to send the message
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-            }
-            if (type.equals("matches")) {
-                message.setText(Matches.getMessage(league));
-                try {
-                    execute(message); // Call method to send the message
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (type.equals("scorers")) {
-                message.setText(Scorers.getMessage(league));
-                try {
-                    execute(message); // Call method to send the message
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
+          	}
+          	else {
+	            if (type.equals("standing")) {
+	            	message.setText(Standing.getMessage(league));
+	                try {
+	                    execute(message); // Call method to send the message
+	                } catch (TelegramApiException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	            if (type.equals("matches")) {
+	                message.setText(Matches.getMessage(league));
+	                try {
+	                    execute(message); // Call method to send the message
+	                } catch (TelegramApiException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	            if (type.equals("scorers")) {
+	                message.setText(Scorers.getMessage(league));
+	                try {
+	                    execute(message); // Call method to send the message
+	                } catch (TelegramApiException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+          	}
 
             // WEATHER CALLBACKS: DAILY AND HOURLY
             if (type.equals("daily")){
