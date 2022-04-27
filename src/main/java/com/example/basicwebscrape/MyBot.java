@@ -27,6 +27,7 @@ import com.example.basicwebscrape.news.NewsByTopic;
 import com.example.basicwebscrape.weather.*;
 import com.example.basicwebscrape.OilPrice.*;
 public class MyBot extends TelegramLongPollingBot {
+	static String topicNews;
 	private GoldPrice crawler = new GoldPrice();
     @Override
     public void onUpdateReceived(Update update) {
@@ -314,15 +315,32 @@ public class MyBot extends TelegramLongPollingBot {
 
             // OTHER CALLBACKS: ......
             if (topic.equals("news")) {
-            	NewsByTopic news;
-            	if (type.equals("latest")) {
-            		news = new NewsByTopic();
+            	if (type.equals("next")) {
+            		NewsByTopic news = new NewsByTopic(topicNews);
+                	message.setChatId(msg.getChatId().toString());
+                	message.setText(news.randomNews());
+                	message.setReplyMarkup(NewsByTopic.setNext());
+            	}
+            	else if (type.equals("return")) {
+            		message.setChatId(msg.getChatId().toString());
+                    message.setText("Select Topic");
+                    message.setReplyMarkup(NewsByTopic.setButtons());
             	}
             	else {
-            		news = new NewsByTopic(type);
+            		NewsByTopic news;
+	            	if (type.equals("latest")) {
+	            		news = new NewsByTopic();
+	            		message.setChatId(msg.getChatId().toString());
+		            	message.setText(news.getNewsByTopic());
+	            	}
+	            	else {
+	            		news = new NewsByTopic(type);
+	            		topicNews = type;
+	            		message.setChatId(msg.getChatId().toString());
+		            	message.setText(news.getNewsByTopic());
+		            	message.setReplyMarkup(NewsByTopic.setNext());
+	            	}
             	}
-            	message.setChatId(msg.getChatId().toString());
-            	message.setText(news.getNewsByTopic());
             	try {
                     execute(message);
                 } catch (TelegramApiException e) {
@@ -342,6 +360,6 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         // TODO
-        return "5124630324:AAGd47oSNGFSX2xhEdOmY8-G8BMD0v9rYDc";
+        return "5336710924:AAFeLLC8O7ScaBwNWv-o_Jo_jAIJbFl3WdY";
     }
 }
