@@ -175,7 +175,7 @@ public class MyBot extends TelegramLongPollingBot {
                 
             }
             // FOOTBALL
-            else if (command.equals("/football")) {
+            else if (command.equals("/football") || command.equals("Football Events")) {
             	message.setChatId(update.getMessage().getChatId().toString());
             	message.setText("Chọn một trong các mục sau");
             	message.setReplyMarkup(Buttons.setButtons1());
