@@ -189,7 +189,7 @@ public class MyBot extends TelegramLongPollingBot {
                 message.setReplyMarkup(keyboardMarkup);
             }
             //OIL
-            else if(command.equals("/oilprice") || command.equals("Oil Price")){
+            else if(command.equals("/oil") || command.equals("Oil Price")){
                 String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
                 String msg=OilPrice.returnOilPrice(url);
                 message.setChatId(update.getMessage().getChatId().toString());
@@ -359,6 +359,6 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         // TODO
-        return "5336710924:AAFeLLC8O7ScaBwNWv-o_Jo_jAIJbFl3WdY";
+        return "5349668863:AAHErME4MWoe--Hs_zI6Kq6z_qLGow6-ae4";
     }
 }
