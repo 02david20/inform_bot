@@ -36,16 +36,12 @@ class OneDay {
 }
 
 public class GoldPrice {
-	
-	private boolean crawled ;
-	
-    private static final HttpClient httpClient = HttpClient.newBuilder()
+	private static final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
             .connectTimeout(Duration.ofSeconds(10))
             .build();
     public static Map <String, String> urlMap;
     public static Map <String, ArrayList<OneDay> > dataMap;
-    private static ArrayList<String> tracking;
     public GoldPrice() {
     	
     	urlMap = new HashMap <String,String>();
@@ -69,9 +65,6 @@ public class GoldPrice {
     	dataMap.put("SJC_DN", new ArrayList<OneDay>());
     	dataMap.put("PNJ_HCM", new ArrayList<OneDay>());
     	dataMap.put("PNJ_HN", new ArrayList<OneDay>());
-    	
-    	tracking = new ArrayList<String>();
-    	this.crawled = false;
     }
     public static void crawl_data(String ID) {
     	String urlString = urlMap.get(ID);
@@ -175,25 +168,7 @@ public class GoldPrice {
     	}
     	return str;
     }
-    // Tracking Gold every day
-    public Boolean Track_ID(String ID) {
-    	if(! dataMap.containsKey(ID)) {
-    		return false;
-    	}
-    	if(tracking.contains(ID))
-    		return true;
-    	tracking.add(ID);
-    	return true;
-    }
-    
-    public String getTrackInfo() {
-    	String msg = new String();
-    	for (String ID : tracking) {
-    		msg += getPrice(ID) + "\n----------\n";
-    	}
-    	return msg;
-    }
-    
+        
     private static String Today() {
     	Date date= new Date();
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
