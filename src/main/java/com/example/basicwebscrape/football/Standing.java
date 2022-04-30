@@ -34,18 +34,13 @@ public class Standing {
     		msg += name + "\n";
     		msg += "-------------------------\n";
     		final Document document = Jsoup.connect(url).get();
-    		for (Element row : document.select(
-    			"table.styled__Table-sc-1elgz3g-1.gsiGjM tr")) {
-    			if (row.select(".rank").text().equals("")) {
-    				continue;
-    			}
-    			else {
-    				final String rank = row.select(".rank").text();
-    				final String team = row.select(".LeagueRow_teamCell__2cmu7").text();
-    				final String paras = row.select(".LeagueRow_centerCell__2n3eq").text();
-    				//System.out.println(rank + ". " + team + "\n" + convert(paras));
-    				msg += rank + ". " + team + "\n" + convert(paras) + "\n\n";
-    			}
+			Element all = document.getElementsByTag("tbody").get(0);
+    		for (Element row : all.children()) {
+    			final String rank = row.select("span.Gj").text();
+    			final String team = row.select(".xd").text();
+    			final String paras = row.select(".yd").text();
+    			//System.out.println(rank + ". " + team + "\n" + convert(paras));
+    			msg += rank + ". " + team + "\n" + convert(paras) + "\n\n";
     		}
     	}
     	catch (Exception e) {

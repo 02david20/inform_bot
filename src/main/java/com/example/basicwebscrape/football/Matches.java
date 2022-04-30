@@ -34,18 +34,18 @@ public class Matches {
 			msg += name + "\n";
 			msg += "-----------------------------------------\n";
 			final Document document = Jsoup.connect(url).get();
-			Element all = document.select(".MatchRows_root__1NKae").get(0);
+			Element all = document.select(".Ea").get(0);
 			for (Element row : all.children()) {
-				if (row.className().equals("CategoryHeader_categoryHeaderWrapper__33fmX")) {
-					String date = row.select(".CategoryHeader_date__4oEhd").text();
+				if (row.className().equals("eb")) {
+					String date = row.select(".fb").text();
 					//System.out.println(date);
 					msg += date +"\n";
 				}
-				if (row.className().equals("MatchRow_footballRoot__1S4eG MatchRow_isHighlighted__397Dm")) {
-					String time = row.select(".MatchRowTime_justifyContentStart__3XvwU.MatchRowTime_time__2Fkd2").text();
-					String home = row.select(".FootballMatchRow_home__2jnn7").text();
-					String score = row.select(".FootballMatchRow_score__2sJ4_").text();
-					String away = row.select(".FootballMatchRow_away__12Br8").text();
+				if (row.className().equals("Jc Nc")) {
+					String time = row.select(".qg.ug").text();
+					String home = row.select(".Lh").text();
+					String score = row.select(".Ih").text();
+					String away = row.select(".Mh").text();
 					//System.out.println(time + ": " + home + " " + score + " " + away);
 					msg += time + ": " + home + " " + score + " " + away + "\n\n";
 				}
