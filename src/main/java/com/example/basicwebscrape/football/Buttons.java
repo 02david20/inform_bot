@@ -7,7 +7,35 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 public class Buttons {
-	public static InlineKeyboardMarkup setButtons(String type) {
+	public static InlineKeyboardMarkup setButtons1() {
+		InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+		List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
+		List < InlineKeyboardButton > button_list1 = new ArrayList<>();
+		List < InlineKeyboardButton > button_list2 = new ArrayList<>();
+		List < InlineKeyboardButton > button_list3 = new ArrayList<>();
+		
+		InlineKeyboardButton standing = new InlineKeyboardButton();
+		standing.setText("Bảng xếp hạng");
+		standing.setCallbackData("no_standing");
+		InlineKeyboardButton matches = new InlineKeyboardButton();
+		matches.setText("Các trận đấu gần nhất");
+		matches.setCallbackData("no_matches");
+		InlineKeyboardButton scorers = new InlineKeyboardButton();
+		scorers.setText("Top 10 vua phá lưới giải đấu");
+		scorers.setCallbackData("no_scorers");
+		
+		button_list1.add(standing);
+		button_list2.add(matches);
+		button_list3.add(scorers);
+		
+		buttons.add(button_list1);
+		buttons.add(button_list2);
+		buttons.add(button_list3);
+		markupInline.setKeyboard(buttons);
+		return markupInline;
+	}
+	
+	public static InlineKeyboardMarkup setButtons2(String type) {
 		InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 		List < List < InlineKeyboardButton >> buttons = new ArrayList<>();
 		List < InlineKeyboardButton > button_list1 = new ArrayList<>();

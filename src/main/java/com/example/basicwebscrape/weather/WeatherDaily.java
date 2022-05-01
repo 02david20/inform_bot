@@ -1,8 +1,6 @@
 package com.example.basicwebscrape.weather;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.json.JSONObject;
 class Temperature{
     private double minVal;

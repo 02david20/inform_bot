@@ -8,12 +8,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Scorers {
-	private Map<String, String> urls;
-	private Map<String, String> leagues;
-	
-	public Scorers() {
+	public static String getMessage(String league) {
 		// league urls
-    	this.urls = new HashMap<String, String>();
+    	Map<String, String> urls = new HashMap<String, String>();
     	urls.put("England", "https://www.fctables.com/england/premier-league/top-scorers/");
     	urls.put("Spain", "https://www.fctables.com/spain/liga-bbva/top-scorers/");
     	urls.put("Italy", "https://www.fctables.com/italy/serie-a/top-scorers/");
@@ -22,16 +19,14 @@ public class Scorers {
     	urls.put("Vietnam", "https://www.fctables.com/vietnam/v-league/top-scorers/");
     	
     	// name league
-    	this.leagues = new HashMap<String, String>();
+    	Map<String, String >leagues = new HashMap<String, String>();
     	leagues.put("England", "Premier League");
     	leagues.put("Spain", "Laliga Santader");
     	leagues.put("Italy", "Serie A");
     	leagues.put("Germany", "Bundesliga");
     	leagues.put("France", "Ligue 1");
     	leagues.put("Vietnam", "V-League");
-	}
-	
-	public String getMessage(String league) {
+
 		String url = urls.get(league);
 		String name = leagues.get(league);
     	String msg = "";
