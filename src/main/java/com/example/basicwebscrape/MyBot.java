@@ -8,8 +8,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MyBot extends TelegramLongPollingBot {
     public String getOilPrice() {
-        String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
-        return OilPrice.returnOilPrice(url);
+        OilPrice oilPrice = OilPrice.getOilPriceInstance();
+        return oilPrice.getOilPrice();
     }
 
     @Override
