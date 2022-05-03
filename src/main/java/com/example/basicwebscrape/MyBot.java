@@ -190,8 +190,8 @@ public class MyBot extends TelegramLongPollingBot {
             }
             //OIL
             else if(command.equals("/oil") || command.equals("Oil Price")){
-                String url = "https://www.pvoil.com.vn/truyen-thong/tin-gia-xang-dau";
-                String msg=OilPrice.returnOilPrice(url);
+                OilPrice oilPrice = OilPrice.getOilPriceInstance();
+                String msg=oilPrice.getOilPrice();
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setText(msg);
             }
