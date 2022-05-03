@@ -1,8 +1,6 @@
 package com.example.basicwebscrape.weather;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.json.JSONObject;
 class Temperature{
     private double minVal;
@@ -133,11 +131,11 @@ class Night extends Time{
     }
 }
 public class WeatherDaily {
-    private String icon;
     private String date;
     private Temperature temp;
     private Day day;
     private Night night;
+    public WeatherDaily(){}
     public WeatherDaily(JSONObject o){
         String fullDate = o.getString("Date");
         JSONObject tem = o.getJSONObject("Temperature");
@@ -157,12 +155,6 @@ public class WeatherDaily {
     }
     public void setDate(String date){
         this.date = date;
-    }
-    public String getIcon(){
-        return this.icon;
-    }
-    public void setIcon(String iconLink){
-        this.icon = iconLink;
     }
     public Day getDay(){
         return this.day;
